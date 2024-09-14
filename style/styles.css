@@ -1,0 +1,63 @@
+/* Reset and basic styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+/* Sudoku Grid */
+.sudoku-grid {
+    margin: 1%;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr); /* 9 columns */
+    grid-template-rows: repeat(9, 1fr);    /* 9 rows */
+    width: 90vmin;  /* Responsive width */
+    height: 90vmin; /* Responsive height */
+    border: 2px solid black; /* Outer border */
+}
+
+/* Style each cell */
+.cell {
+    background-color: white;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2vmin;
+}
+
+/* Thicker right border for every 3rd column, except the last column */
+.sudoku-grid > .cell:nth-child(3n):not(:nth-child(9n)) {
+    border-right: 2px solid black; /* Thicker right border for every 3rd column */
+}
+
+/* Thicker bottom border for every 3rd row */
+.sudoku-grid > .cell:nth-child(n+19):nth-child(-n+27), /* Bottom of top 3x3 */
+.sudoku-grid > .cell:nth-child(n+46):nth-child(-n+54) { /* Bottom of middle 3x3 */
+    border-bottom: 2px solid black; /* Thicker bottom border for every 3rd row */
+}
+
+/* Handle the last column to avoid double right border */
+.sudoku-grid > .cell:nth-child(9n) {
+    border-right: none; /* No right border on the last column */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .sudoku-grid {
+        width: 100vmin;
+        height: 100vmin;
+    }
+
+    .cell {
+        font-size: 3vmin;
+    }
+}
