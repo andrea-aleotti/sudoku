@@ -121,12 +121,29 @@
     });
 
     $(document).ready(function () {
-        $.getScript('./js/digit-recognition.js', function() {
-            console.log("script ready")
-        })
+        function loadScript() {
+            $.getScript('./js/digit-recognition.js', function() {
+                console.log("Script loaded and ready.");
+            });
+        }
+        // Observe the DOM for changes to detect when popup is added
+        const observer = new MutationObserver((mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'childList' && document.getElementById('my-popup')) {
+                    // Popup is in the DOM, load the script
+                    loadScript();
+                    // Disconnect observer after the script is loaded
+                    observer.disconnect();
+                    break;
+                }
+            }
+        });
 
+        // Start observing the body for changes
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        
         const cells = $('.sudoku-grid .cell');
-
         const solvedBoard = generateSudokuSolution();
     
         // Assign the correct value to each cell
