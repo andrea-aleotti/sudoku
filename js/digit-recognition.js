@@ -232,6 +232,19 @@ $("#predict-button").click(async function () {
 	displayChart(results);
 	displayLabel(results); */
 
+	var max = results[0];
+    var maxIndex = 0;
+
+    for (var i = 1; i < results.length; i++) {
+        if (results[i] > max) {
+            maxIndex = i;
+            max = results[i];
+        }
+    }
+
+	let id_cell = $(this).attr("data-cell");
+	$(`#${id_cell}`).text(maxIndex);
+
 	console.log(results);
 });
 
