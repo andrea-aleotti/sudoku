@@ -129,7 +129,7 @@
         // Observe the DOM for changes to detect when popup is added
         const observer = new MutationObserver((mutationsList) => {
             for (const mutation of mutationsList) {
-                if (mutation.type === 'childList' && document.getElementById('my-popup')) {
+                if (mutation.type === 'childList' && document.getElementById('canvas_box')) {
                     // Popup is in the DOM, load the script
                     loadScript();
                     // Disconnect observer after the script is loaded
