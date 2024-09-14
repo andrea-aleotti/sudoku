@@ -228,9 +228,9 @@ $("#predict-button").click(async function () {
 	let results = Array.from(predictions);
 
 	// display the predictions in chart
-	$("#result_box").removeClass('d-none');
+	/* $("#result_box").removeClass('d-none');
 	displayChart(results);
-	displayLabel(results);
+	displayLabel(results); */
 
 	console.log(results);
 });
