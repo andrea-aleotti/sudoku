@@ -175,8 +175,6 @@ $("#clear-button").click(async function () {
 	clickX = new Array();
 	clickY = new Array();
 	clickD = new Array();
-	$(".prediction-text").empty();
-	$("#result_box").addClass('d-none');
 });
 
 //-------------------------------------
@@ -245,6 +243,8 @@ $("#predict-button").click(async function () {
 	let id_cell = $(this).attr("data-cell");
 	$(`#${id_cell}`).text(maxIndex);
 
+	myPopup.hide();
+	$("#clear-button").click();
 	console.log(results);
 });
 
