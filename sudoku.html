@@ -160,6 +160,9 @@
 
         $('.cell').on('click', function () {
 
+            $('.cell').removeClass("highlight");
+            $(this).addClass("highlight");
+
             $("#predict-button").attr("data-cell", $(this).attr("id"));
             $(".popup-title").text(`Cell #${$(this).attr("id")}`);
             myPopup.show();

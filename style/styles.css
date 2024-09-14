@@ -54,6 +54,10 @@ body {
     margin: 0 5px 0 5px;
 }
 
+.highlight {
+    background-color: cornsilk;
+}
+
 /* Responsive adjustments for smaller screens */
 @media (max-width: 600px) {
     .sudoku-grid {

@@ -29,15 +29,6 @@ function isValid(board, row, col, num) {
     return true;
 }
 
-// Shuffle function to randomize the order of numbers
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
 // Function to generate a full Sudoku solution using backtracking with randomness
 function solveSudoku(board) {
     for (let row = 0; row < 9; row++) {
@@ -69,6 +60,31 @@ function solveSudoku(board) {
     return true; // The board is fully solved
 }
 
+// Function to check if a puzzle has a unique solution
+function hasUniqueSolution(board) {
+    let solutions = 0;
+
+    function countSolutions(board) {
+        for (let row = 0; row < 9; row++) {
+            for (let col = 0; col < 9; col++) {
+                if (board[row][col] === 0) {
+                    for (let num = 1; num <= 9; num++) {
+                        if (isValid(board, row, col, num)) {
+                            board[row][col] = num;
+                            countSolutions(board);
+                            board[row][col] = 0;
+                        }
+                    }
+                    return; // Backtrack when encountering empty cell
+                }
+            }
+        }
+        solutions++;
+    }
+
+    countSolutions(board);
+    return solutions === 1; // True if only one solution exists
+}
 
 // Create an empty 9x9 grid
 function generateEmptyGrid() {
@@ -89,35 +105,55 @@ function generateSudokuSolution() {
     return board; // Return the filled grid
 }
 
+// Function to generate a puzzle with a unique solution
 function displayNumbers(cells, difficulty) {
-    // Set number of cells to display based on difficulty
-    let numbersToDisplay;
+    let puzzle = generateSudokuSolution(); // Generate a solved board
+    let numbersToRemove;
 
     if (difficulty === 'f') {
-        numbersToDisplay = 40;
+        numbersToRemove = 40;
     } else if (difficulty === 'm') {
-        numbersToDisplay = 30;
+        numbersToRemove = 50;
     } else if (difficulty === 'd') {
-        numbersToDisplay = 20;
+        numbersToRemove = 60;
     }
 
-    // Create an array of cell indices
-    let cellIndices = [...Array(cells.length).keys()];
+    // Create an array of all cell positions
+    let cellIndices = [...Array(81).keys()];
+    cellIndices = shuffleArray(cellIndices); // Shuffle the array
 
-    // Shuffle the cellIndices array to get random indices
-    cellIndices = shuffleArray(cellIndices);
+    for (let i = 0; i < numbersToRemove; i++) {
+        const cellIndex = cellIndices[i];
+        const row = Math.floor(cellIndex / 9);
+        const col = cellIndex % 9;
 
-    // Display the appropriate number of cells
-    for (let i = 0; i < numbersToDisplay; i++) {
-        const randomIndex = cellIndices[i];
-        const cell = cells[randomIndex];
+        const temp = puzzle[row][col]; // Temporarily remove the number
+        puzzle[row][col] = 0;
 
-        // Display the number in the cell from the data-value attribute
-        cell.innerText = cell.getAttribute('data-value');
+        // Check if the puzzle is still solvable with a unique solution
+        if (!hasUniqueSolution(puzzle)) {
+            puzzle[row][col] = temp; // Revert if it leads to multiple solutions
+        }
+    }
+
+    // Now display the puzzle in the grid
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            const cellIndex = row * 9 + col;
+            const cell = cells[cellIndex];
+
+            if (puzzle[row][col] !== 0) {
+                cell.innerText = puzzle[row][col];
+                cell.setAttribute('data-value', puzzle[row][col]); // Store the value as attribute
+            } else {
+                cell.innerText = ''; // Hide empty cells
+                cell.setAttribute('data-value', ''); // Clear data-value attribute
+            }
+        }
     }
 }
 
-// Shuffle function to randomize cell indices (Fisher-Yates Shuffle)
+// Shuffle function to randomize array (Fisher-Yates Shuffle)
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -125,6 +161,3 @@ function shuffleArray(array) {
     }
     return array;
 }
-
-// Example: Call displayNumbers() with the chosen difficulty
-// displayNumbers('medium'); // Or 'easy', 'hard' based on player choice
